@@ -63,8 +63,7 @@ function App() {
   const addNote = (event) => {
     event.preventDefault()
     const noteObject = {
-      content: newNote,
-      id: notes.length + 1
+      content: newNote
     }
     noteService
       .create(noteObject)
