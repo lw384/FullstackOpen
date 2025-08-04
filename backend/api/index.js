@@ -23,7 +23,7 @@ let notes = [
     },
     {
         "id": "4",
-        "content": "a new note..."
+        "content": "a new note from server"
     }
 ]
 
@@ -79,7 +79,7 @@ app.post('/api/notes', (request, response) => {
     response.json(note)
 })
 
-const PORT = 3003
+const PORT = process.env.PORT || 3003
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })

@@ -1,0 +1,18 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "backend/api/index.js",
+            "use": "@vercel/node"
+        },
+        { "src": "vite-project/package.json", "use": "@vercel/static-build" }
+    ],
+    "routes": [
+        {
+            "src": "/api/(.*)",
+            "dest": "backend/api/index.js"
+        },
+        { "src": "/(.*)", "dest": "/vite-project/$1" }
+    ],
+    "buildCommand": "npm install --prefix backend && npm install --prefix vite-project && npm run build --prefix vite-project"
+}
