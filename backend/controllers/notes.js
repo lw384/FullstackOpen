@@ -29,17 +29,15 @@ notesRouter.post('/', (request, response, next) => {
 
     note.save()
         .then(savedNote => {
-            response.json(savedNote)
+            response.status(201).json(savedNote)
         })
         .catch(error => next(error))
 })
 
-notesRouter.delete('/:id', (request, response, next) => {
-    Note.findByIdAndDelete(request.params.id)
-        .then(() => {
-            response.status(204).end()
-        })
-        .catch(error => next(error))
+notesRouter.delete('/:id', async (request, response, next) => {
+    // express 5.x 之后可以自动处理 try catch 不需要 express-async-errors 插件了，也不需要写 try catch 💨
+    await Note.findByIdAndDelete(request.params.id)
+    response.status(204).end()
 })
 
 notesRouter.put('/:id', (request, response, next) => {
