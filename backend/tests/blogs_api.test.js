@@ -1,5 +1,5 @@
 const assert = require('node:assert')
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const Blog = require('../models/blogs')
@@ -120,6 +120,39 @@ test('if title or url property is missing, return 400', async () => {
         .expect(400)
         .expect('Content-Type', /application\/json/)
 })
+
+describe('deletion of a blog', () => {
+    test('succeeds with status code 204 id id is valid', async () => {
+        const blogAtStart = await BlogsInDb()
+        const blogToDelete = blogAtStart[0]
+
+        await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+
+        const blogAtEnd = await BlogsInDb()
+        const title = blogAtEnd.map(n => n.title)
+        assert(!title.includes(blogToDelete.title))
+
+        assert.strictEqual(blogAtEnd.length, initialBlogs.length - 1)
+    })
+})
+
+describe('update a blog', () => {
+    test('succeeds with valid data', async () => {
+        const blogAtStart = await BlogsInDb()
+        const updateBlog = blogAtStart[0]
+        await api.put(`/api/blogs/${updateBlog.id}`).send({ likes: 200 }).expect(200)
+
+        const blogAtEnd = await BlogsInDb()
+        const blogUpdate = blogAtEnd.find(blog => blog.id == updateBlog.id)
+        assert.strictEqual(blogUpdate.likes, 200)
+    })
+    test('fail with status code 400 if likes invalid', async () => {
+        const blogAtStart = await BlogsInDb()
+        const updateBlog = blogAtStart[0]
+        await api.put(`/api/blogs/${updateBlog.id}`).send({}).expect(400)
+    })
+})
+
 
 
 

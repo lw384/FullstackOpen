@@ -28,4 +28,23 @@ blogsRouter.post('/', async (request, response) => {
     response.status(201).json(saveBlog)
 })
 
+blogsRouter.delete('/:id', async (request, response, next) => {
+    // express 5.x 之后可以自动处理 try catch 不需要 express-async-errors 插件了，也不需要写 try catch 💨
+    await Blog.findByIdAndDelete(request.params.id)
+    response.status(204).end()
+})
+
+blogsRouter.put('/:id', async (request, response, next) => {
+    const { likes } = request.body
+
+    if (!likes){
+        return response.status(400).json({ error: 'likes are missing' })
+    }
+
+    const blog = await Blog.findById(request.params.id)
+    blog.likes = likes
+    const saveBlog = await blog.save()
+    response.json(saveBlog)
+})
+
 module.exports = blogsRouter
