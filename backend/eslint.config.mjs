@@ -1,7 +1,7 @@
-import js from "@eslint/js";
-import globals from "globals";
+import js from "@eslint/js"
+import globals from "globals"
 import stylisticJs from '@stylistic/eslint-plugin-js'
-import { defineConfig } from "eslint/config";
+import { defineConfig } from "eslint/config"
 
 export default defineConfig([
   js.configs.recommended,
@@ -13,7 +13,6 @@ export default defineConfig([
       '@stylistic/js': stylisticJs,
     },
     rules: {
-      '@stylistic/js/indent': ['error', 2],
       '@stylistic/js/linebreak-style': ['error', 'unix'],
       '@stylistic/js/semi': ['error', 'never'],
     },

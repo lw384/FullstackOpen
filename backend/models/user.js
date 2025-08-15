@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const blogs = require('./blogs')
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -13,6 +14,12 @@ const userSchema = new mongoose.Schema({
             ref: 'Note'
         }
     ],
+    blogs: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Blog'
+        }
+    ]
 })
 
 userSchema.set('toJSON', {
